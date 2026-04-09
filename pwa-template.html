@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1008">
+<meta name="description" content="">
+<title></title>
+<link rel="manifest" href="#" id="manifest-link">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script>
+// ============================================================
+//  CLIENT CONFIG — swap this block for every new deployment
+// ============================================================
+const CLIENT = {
+  brand: {
+    name:         "Rosa's Kitchen",
+    tagline:      "Handmade Italian, Every Day",
+    primaryColor: "#C84B31",
+    accentColor:  "#E8A23A",
+    darkBg:       "#110D07",
+    cardBg:       "#1C1510",
+    textLight:    "#F5EFE6",
+    textMuted:    "#A89880",
+    logo:         null,           // URL string or null to use text logo
+    heroImage:    null,           // URL string or null for gradient fallback
+  },
+  contact: {
+    phone:        "(508) 555-0192",
+    email:        "hello@rosaskitchen.com",
+    address:      "14 Main St, Worcester, MA",
+    mapUrl:       "https://maps.google.com/?q=14+Main+St+Worcester+MA",
+    hours: [
+      { day: "Monday",    time: "Closed" },
+      { day: "Tuesday",   time: "11am – 9pm" },
+      { day: "Wednesday", time: "11am – 9pm" },
+      { day: "Thursday",  time: "11am – 9pm" },
+      { day: "Friday",    time: "11am – 10pm" },
+      { day: "Saturday",  time: "10am – 10pm" },
+      { day: "Sunday",    time: "10am – 8pm" },
+    ],
+  },
+  social: {
+    instagram: "https://instagram.com/",
+    facebook:  "https://facebook.com/",
+    google:    "https://g.page/",
+  },
+  content: {
+    hero: {
+      headline: "Where Every Meal\nTells a Story",
+      sub:      "Fresh pasta, wood-fired flavours, and a table that feels like home.",
+      cta:      "Reserve a Table",
+    },
+    about: {
+      heading:  "Our Story",
+      body:     "Rosa's Kitchen started as a small family recipe and grew into a Worcester institution. We source ingredients locally, make our pasta in-house every morning, and believe that good food is the best reason to gather. Come hungry, leave like family.",
+      badge:    "Est. 2009",
+    },
+  },
+  menu: [
+    {
+      category: "Starters",
+      items: [
+        { name: "Bruschetta al Pomodoro",   desc: "Grilled sourdough, heirloom tomato, fresh basil",           price: "$12" },
+        { name: "Burrata Caprese",          desc: "House burrata, roasted pepper, aged balsamic",              price: "$16" },
+        { name: "Arancini",                 desc: "Saffron risotto balls, mozzarella, arrabiata dip",          price: "$14" },
+      ]
+    },
+    {
+      category: "Pasta",
+      items: [
+        { name: "Tagliatelle al Ragù",      desc: "Slow-braised beef, house pasta, grana padano",             price: "$24" },
+        { name: "Cacio e Pepe",             desc: "Tonnarelli, pecorino, tellicherry pepper",                 price: "$20" },
+        { name: "Lobster Linguine",         desc: "Maine lobster, cherry tomato, chilli, white wine",        price: "$38" },
+      ]
+    },
+    {
+      category: "Mains",
+      items: [
+        { name: "Branzino al Forno",        desc: "Whole roasted sea bass, capers, lemon, olive oil",         price: "$36" },
+        { name: "Pollo alla Parmigiana",    desc: "Free-range chicken, San Marzano, fior di latte",           price: "$28" },
+        { name: "Bistecca Fiorentina",      desc: "28-day dry-aged T-bone (800g), salsa verde, fries",        price: "$62" },
+      ]
+    },
+    {
+      category: "Desserts",
+      items: [
+        { name: "Tiramisu della Casa",      desc: "Mascarpone, espresso, Marsala, cocoa",                     price: "$12" },
+        { name: "Panna Cotta",              desc: "Vanilla bean, seasonal berry coulis",                      price: "$10" },
+      ]
+    },
+  ],
+  gallery: [
+    { url: null, caption: "Handmade pasta" },
+    { url: null, caption: "Wood-fired mains" },
+    { url: null, caption: "Our dining room" },
+    { url: null, caption: "Weekend brunch" },
+    { url: null, caption: "The wine wall" },
+    { url: null, caption: "Dessert selection" },
+  ],
+  reviews: [
+    { author: "Maria T.",  stars: 5, text: "Best pasta I've had outside of Rome. Rosa's is a treasure.",           date: "March 2025" },
+    { author: "James R.",  stars: 5, text: "Incredible atmosphere and the tagliatelle is absolutely outstanding.", date: "February 2025" },
+    { author: "Sophie L.", stars: 5, text: "We come every Friday. The lobster linguine is non-negotiable.",       date: "January 2025" },
+  ],
+  faq: [
+    { q: "Do you take reservations?",         a: "Yes — call us or use the Reserve button. Walk-ins welcome based on availability." },
+    { q: "Is there a vegetarian menu?",        a: "Absolutely. Most pasta dishes can be made vegetarian and we have dedicated plant-based mains." },
+    { q: "Do you cater private events?",       a: "Yes. We host private dining for 10–60 guests. Email us for availability and menus." },
+    { q: "Is there parking nearby?",           a: "Street parking on Main St is free after 6pm. A public lot is two blocks north." },
+  ],
+  // ── Feature flags ──────────────────────────────────────────
+  features: {
+    menu:     true,
+    gallery:  true,
+    reviews:  true,
+    booking:  true,
+    faq:      true,
+    social:   true,
+  },
+};
+// ============================================================
+</script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary:    #C84B31;
+    --accent:     #E8A23A;
+    --dark:       #110D07;
+    --card:       #1C1510;
+    --text:       #F5EFE6;
+    --muted:      #A89880;
+    --border:     rgba(255,255,255,0.08);
+    --radius:     4px;
+    --font-head:  'Cormorant Garamond', Georgia, serif;
+    --font-body:  'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw;
+    height: 64px;
+    background: rgba(17,13,7,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .nav-logo {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-size: 13px; font-weight: 400; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--primary); color: var(--text);
+    border: none; padding: 9px 20px; border-radius: var(--radius);
+    font-family: var(--font-body); font-size: 13px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    text-decoration: none; transition: background 0.2s, opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+  .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--text); margin: 5px 0; transition: all 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; top: 64px; left: 0; right: 0;
+    background: rgba(17,13,7,0.97); backdrop-filter: blur(12px);
+    padding: 24px 5vw 32px; z-index: 99; border-bottom: 1px solid var(--border);
+  }
+  .mobile-menu.open { display: block; }
+  .mobile-menu a {
+    display: block; padding: 12px 0; font-size: 18px; color: var(--text);
+    font-family: var(--font-head); text-decoration: none; border-bottom: 1px solid var(--border);
+  }
+  .mobile-cta-wrap { margin-top: 20px; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    position: relative; overflow: hidden;
+    padding: 100px 5vw 60px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 40%, rgba(200,75,49,0.18) 0%, transparent 65%),
+                radial-gradient(ellipse at 20% 80%, rgba(232,162,58,0.10) 0%, transparent 55%),
+                var(--dark);
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.018'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 760px; }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-headline {
+    font-family: var(--font-head);
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    white-space: pre-line;
+    color: var(--text);
+    margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+  }
+  .hero-headline em { font-style: italic; color: var(--primary); }
+  .hero-sub {
+    font-size: 17px; font-weight: 300; color: var(--muted);
+    max-width: 480px; margin: 0 auto 36px;
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 0.65s forwards;
+  }
+  .btn-primary {
+    background: var(--primary); color: var(--text); border: none;
+    padding: 14px 32px; border-radius: var(--radius); font-size: 14px;
+    font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none; transition: opacity 0.2s;
+    font-family: var(--font-body);
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 14px 32px; border-radius: var(--radius); font-size: 14px;
+    font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    font-family: var(--font-body);
+  }
+  .btn-outline:hover { border-color: var(--text); }
+  .hero-scroll {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeUp 0.9s 1s forwards;
+  }
+  .hero-scroll span { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* SECTIONS */
+  section { padding: 96px 5vw; }
+  .section-label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+  }
+  .section-heading {
+    font-family: var(--font-head); font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300; line-height: 1.1; margin-bottom: 24px;
+  }
+  .section-heading em { font-style: italic; color: var(--primary); }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .divider-line {
+    width: 48px; height: 1px; background: var(--primary); margin-bottom: 32px;
+  }
+
+  /* ABOUT */
+  #about .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  }
+  .about-img-placeholder {
+    aspect-ratio: 4/5; border-radius: 2px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .about-img-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 40%, rgba(200,75,49,0.12), transparent 70%);
+  }
+  .about-img-placeholder span {
+    font-family: var(--font-head); font-size: 13px; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase; position: relative;
+  }
+  .about-badge {
+    display: inline-block; font-family: var(--font-head);
+    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid rgba(232,162,58,0.3);
+    padding: 6px 14px; border-radius: 2px; margin-bottom: 16px;
+  }
+  .about-body { font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.8; }
+
+  /* MENU */
+  #menu { background: var(--card); }
+  .menu-header { text-align: center; margin-bottom: 56px; }
+  .menu-header .divider-line { margin: 0 auto 32px; }
+  .menu-categories { display: flex; flex-direction: column; gap: 48px; }
+  .menu-cat-title {
+    font-family: var(--font-head); font-size: 13px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  }
+  .menu-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0; }
+  .menu-item {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 16px 0; border-bottom: 1px solid var(--border); gap: 16px;
+  }
+  .menu-item-info { flex: 1; }
+  .menu-item-name { font-size: 15px; font-weight: 400; margin-bottom: 3px; }
+  .menu-item-desc { font-size: 13px; color: var(--muted); font-weight: 300; }
+  .menu-item-price { font-family: var(--font-head); font-size: 17px; color: var(--accent); white-space: nowrap; }
+
+  /* GALLERY */
+  #gallery .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 220px);
+    gap: 10px;
+    margin-top: 48px;
+  }
+  .gallery-item {
+    background: var(--card); border-radius: 2px; overflow: hidden;
+    position: relative; cursor: pointer;
+    border: 1px solid var(--border);
+    transition: transform 0.3s;
+  }
+  .gallery-item:hover { transform: scale(1.01); }
+  .gallery-item:first-child { grid-row: span 2; }
+  .gallery-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: flex-end; padding: 14px;
+    background: radial-gradient(ellipse at 50% 30%, rgba(200,75,49,0.1), transparent 70%), var(--card);
+  }
+  .gallery-caption {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* REVIEWS */
+  #reviews { background: var(--card); }
+  .reviews-header { text-align: center; margin-bottom: 56px; }
+  .reviews-header .divider-line { margin: 0 auto 32px; }
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .review-card {
+    background: var(--dark); border: 1px solid var(--border);
+    border-radius: 4px; padding: 28px; transition: border-color 0.2s;
+  }
+  .review-card:hover { border-color: rgba(200,75,49,0.3); }
+  .review-stars { color: var(--accent); font-size: 14px; letter-spacing: 3px; margin-bottom: 14px; }
+  .review-text { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 20px; font-style: italic; font-family: var(--font-head); }
+  .review-author { font-size: 13px; font-weight: 500; }
+  .review-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* FAQ */
+  #faq .faq-wrap { max-width: 680px; margin: 48px auto 0; }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-q {
+    width: 100%; background: none; border: none; color: var(--text);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 0; font-size: 16px; font-weight: 400; cursor: pointer;
+    text-align: left; gap: 16px; font-family: var(--font-body);
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-icon { width: 18px; height: 18px; flex-shrink: 0; position: relative; }
+  .faq-icon::before, .faq-icon::after {
+    content: ''; position: absolute; background: currentColor;
+    left: 50%; top: 50%; transform: translate(-50%,-50%);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .faq-icon::before { width: 12px; height: 1.5px; }
+  .faq-icon::after  { width: 1.5px; height: 12px; }
+  .faq-item.open .faq-icon::after { transform: translate(-50%,-50%) rotate(90deg); opacity: 0; }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    font-size: 15px; color: var(--muted); font-weight: 300; line-height: 1.7;
+  }
+  .faq-a-inner { padding: 0 0 20px; }
+  .faq-item.open .faq-a { max-height: 200px; }
+  .faq-header { text-align: center; margin-bottom: 0; }
+  .faq-header .divider-line { margin: 0 auto 32px; }
+
+  /* CONTACT */
+  #contact { background: var(--card); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 48px; }
+  .hours-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .hours-table tr { border-bottom: 1px solid var(--border); }
+  .hours-table td { padding: 10px 0; font-size: 14px; }
+  .hours-table td:first-child { color: var(--muted); }
+  .hours-table td:last-child { text-align: right; }
+  .hours-table tr.today td { color: var(--accent); }
+  .contact-detail { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+  .contact-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 15px; margin-top: 2px;
+  }
+  .contact-detail-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .contact-detail-text strong { display: block; color: var(--text); font-weight: 500; font-size: 13px; margin-bottom: 2px; }
+  .contact-detail-text a { color: var(--muted); text-decoration: none; }
+  .contact-detail-text a:hover { color: var(--accent); }
+
+  /* SOCIAL */
+  .social-strip {
+    display: flex; gap: 14px; margin-top: 32px;
+  }
+  .social-btn {
+    padding: 9px 18px; border: 1px solid var(--border); border-radius: 2px;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; transition: all 0.2s;
+  }
+  .social-btn:hover { border-color: var(--primary); color: var(--text); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); border-top: 1px solid var(--border);
+    padding: 40px 5vw; text-align: center;
+    font-size: 13px; color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+  .footer-logo {
+    font-family: var(--font-head); font-size: 24px; font-weight: 300;
+    color: var(--text); margin-bottom: 16px; display: block;
+  }
+  .footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; height: 40px; }
+    50%       { opacity: 0.4; height: 24px; }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: block; }
+    #about .about-grid { grid-template-columns: 1fr; }
+    .about-img-placeholder { aspect-ratio: 16/9; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    #gallery .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    #gallery .gallery-grid .gallery-item:first-child { grid-row: span 1; }
+    .menu-items { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    section { padding: 64px 5vw; }
+    #gallery .gallery-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo" id="nav-logo-text"></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu" id="nav-menu-link">Menu</a></li>
+    <li><a href="#gallery" id="nav-gallery-link">Gallery</a></li>
+    <li><a href="#reviews" id="nav-reviews-link">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta" id="nav-cta-btn"></a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about"   onclick="closeMobileMenu()">About</a>
+  <a href="#menu"    onclick="closeMobileMenu()" id="mob-menu-link">Menu</a>
+  <a href="#gallery" onclick="closeMobileMenu()" id="mob-gallery-link">Gallery</a>
+  <a href="#reviews" onclick="closeMobileMenu()" id="mob-reviews-link">Reviews</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  <div class="mobile-cta-wrap">
+    <a href="#contact" class="btn-primary" onclick="closeMobileMenu()" id="mob-cta-btn"></a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow" id="hero-eyebrow"></span>
+    <h1 class="hero-headline" id="hero-headline"></h1>
+    <p class="hero-sub" id="hero-sub"></p>
+    <div class="hero-actions" id="hero-actions"></div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-placeholder" id="about-img">
+        <span>Image placeholder</span>
+      </div>
+      <div>
+        <p class="section-label">Our story</p>
+        <div class="divider-line"></div>
+        <span class="about-badge" id="about-badge"></span>
+        <h2 class="section-heading" id="about-heading"></h2>
+        <p class="about-body reveal" id="about-body"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="container">
+    <div class="menu-header reveal">
+      <p class="section-label">What we serve</p>
+      <div class="divider-line"></div>
+      <h2 class="section-heading">Our <em>Menu</em></h2>
+    </div>
+    <div class="menu-categories reveal" id="menu-categories"></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Gallery</p>
+      <div class="divider-line"></div>
+      <h2 class="section-heading">A Taste of <em>Our World</em></h2>
+    </div>
+    <div class="gallery-grid reveal" id="gallery-grid"></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="container">
+    <div class="reviews-header reveal">
+      <p class="section-label">What guests say</p>
+      <div class="divider-line"></div>
+      <h2 class="section-heading">Guest <em>Reviews</em></h2>
+    </div>
+    <div class="reviews-grid reveal" id="reviews-grid"></div>
+    <div style="text-align:center; margin-top:36px" class="reveal">
+      <a id="google-review-link" href="#" class="btn-outline" style="font-size:13px">Leave a Review on Google</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <p class="section-label">FAQ</p>
+      <div class="divider-line"></div>
+      <h2 class="section-heading">Common <em>Questions</em></h2>
+    </div>
+    <div class="faq-wrap" id="faq-wrap"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Find us</p>
+      <div class="divider-line"></div>
+      <h2 class="section-heading">Come <em>Visit</em></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal" id="contact-details"></div>
+      <div class="reveal">
+        <p class="section-label" style="margin-bottom:16px">Hours</p>
+        <table class="hours-table" id="hours-table"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo" id="footer-logo"></span>
+  <div class="footer-links" id="footer-links"></div>
+  <p id="footer-copy"></p>
+</footer>
+
+<script>
+// Apply CSS vars from config
+document.documentElement.style.setProperty('--primary', CLIENT.brand.primaryColor);
+document.documentElement.style.setProperty('--accent',  CLIENT.brand.accentColor);
+document.documentElement.style.setProperty('--dark',    CLIENT.brand.darkBg);
+document.documentElement.style.setProperty('--card',    CLIENT.brand.cardBg);
+document.documentElement.style.setProperty('--text',    CLIENT.brand.textLight);
+document.documentElement.style.setProperty('--muted',   CLIENT.brand.textMuted);
+
+// Page title
+document.title = CLIENT.brand.name;
+
+// Nav
+document.getElementById('nav-logo-text').textContent = CLIENT.brand.name;
+document.getElementById('nav-cta-btn').textContent   = CLIENT.content.hero.cta;
+document.getElementById('mob-cta-btn').textContent   = CLIENT.content.hero.cta;
+if (!CLIENT.features.menu)    { document.getElementById('nav-menu-link').style.display = 'none'; document.getElementById('mob-menu-link').style.display = 'none'; }
+if (!CLIENT.features.gallery) { document.getElementById('nav-gallery-link').style.display = 'none'; document.getElementById('mob-gallery-link').style.display = 'none'; }
+if (!CLIENT.features.reviews) { document.getElementById('nav-reviews-link').style.display = 'none'; document.getElementById('mob-reviews-link').style.display = 'none'; }
+
+// Hero
+document.getElementById('hero-eyebrow').textContent  = CLIENT.brand.name;
+document.getElementById('hero-headline').textContent = CLIENT.content.hero.headline;
+document.getElementById('hero-sub').textContent      = CLIENT.content.hero.sub;
+const heroActions = document.getElementById('hero-actions');
+if (CLIENT.features.booking) {
+  heroActions.innerHTML = `<a href="#contact" class="btn-primary">${CLIENT.content.hero.cta}</a><a href="#menu" class="btn-outline">View Menu</a>`;
+} else {
+  heroActions.innerHTML = `<a href="#menu" class="btn-primary">View Menu</a><a href="#contact" class="btn-outline">Find Us</a>`;
+}
+
+// About
+document.getElementById('about-badge').textContent   = CLIENT.content.about.badge;
+document.getElementById('about-heading').innerHTML   = CLIENT.content.about.heading;
+document.getElementById('about-body').textContent    = CLIENT.content.about.body;
+if (CLIENT.brand.heroImage) {
+  const img = document.getElementById('about-img');
+  img.style.backgroundImage = `url(${CLIENT.brand.heroImage})`;
+  img.style.backgroundSize = 'cover';
+  img.style.backgroundPosition = 'center';
+  img.querySelector('span').style.display = 'none';
+}
+
+// Menu
+const menuEl = document.getElementById('menu');
+if (!CLIENT.features.menu) { menuEl.style.display = 'none'; }
+else {
+  const menuCats = document.getElementById('menu-categories');
+  menuCats.innerHTML = CLIENT.menu.map(cat => `
+    <div>
+      <p class="menu-cat-title">${cat.category}</p>
+      <div class="menu-items">
+        ${cat.items.map(item => `
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">${item.name}</div>
+              <div class="menu-item-desc">${item.desc}</div>
+            </div>
+            <div class="menu-item-price">${item.price}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// Gallery
+const gallerySection = document.getElementById('gallery');
+if (!CLIENT.features.gallery) { gallerySection.style.display = 'none'; }
+else {
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = CLIENT.gallery.map((img, i) => `
+    <div class="gallery-item">
+      ${img.url
+        ? `<img src="${img.url}" alt="${img.caption}" style="width:100%;height:100%;object-fit:cover;">`
+        : `<div class="gallery-placeholder"><span class="gallery-caption">${img.caption}</span></div>`
+      }
+    </div>
+  `).join('');
+}
+
+// Reviews
+const reviewsSection = document.getElementById('reviews');
+if (!CLIENT.features.reviews) { reviewsSection.style.display = 'none'; }
+else {
+  document.getElementById('reviews-grid').innerHTML = CLIENT.reviews.map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.stars)}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-author">${r.author}</div>
+      <div class="review-date">${r.date}</div>
+    </div>
+  `).join('');
+  document.getElementById('google-review-link').href = CLIENT.social.google;
+}
+
+// FAQ
+const faqSection = document.getElementById('faq');
+if (!CLIENT.features.faq) { faqSection.style.display = 'none'; }
+else {
+  const faqWrap = document.getElementById('faq-wrap');
+  faqWrap.innerHTML = CLIENT.faq.map((item, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <button class="faq-q" onclick="toggleFaq(${i})">
+        ${item.q}
+        <span class="faq-icon"></span>
+      </button>
+      <div class="faq-a"><div class="faq-a-inner">${item.a}</div></div>
+    </div>
+  `).join('');
+}
+
+// Contact
+document.getElementById('contact-details').innerHTML = `
+  <div class="contact-detail">
+    <div class="contact-icon">📍</div>
+    <div class="contact-detail-text">
+      <strong>Address</strong>
+      <a href="${CLIENT.contact.mapUrl}" target="_blank" rel="noopener">${CLIENT.contact.address}</a>
+    </div>
+  </div>
+  <div class="contact-detail">
+    <div class="contact-icon">📞</div>
+    <div class="contact-detail-text">
+      <strong>Phone</strong>
+      <a href="tel:${CLIENT.contact.phone}">${CLIENT.contact.phone}</a>
+    </div>
+  </div>
+  <div class="contact-detail">
+    <div class="contact-icon">✉️</div>
+    <div class="contact-detail-text">
+      <strong>Email</strong>
+      <a href="mailto:${CLIENT.contact.email}">${CLIENT.contact.email}</a>
+    </div>
+  </div>
+  ${CLIENT.features.social ? `
+    <div class="social-strip">
+      <a href="${CLIENT.social.instagram}" target="_blank" class="social-btn">Instagram</a>
+      <a href="${CLIENT.social.facebook}"  target="_blank" class="social-btn">Facebook</a>
+      <a href="${CLIENT.social.google}"    target="_blank" class="social-btn">Google</a>
+    </div>` : ''}
+`;
+
+// Hours — highlight today
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const today = days[new Date().getDay()];
+const hoursTable = document.getElementById('hours-table');
+hoursTable.innerHTML = CLIENT.contact.hours.map(row => `
+  <tr class="${row.day === today ? 'today' : ''}">
+    <td>${row.day}</td>
+    <td>${row.time}</td>
+  </tr>
+`).join('');
+
+// Footer
+document.getElementById('footer-logo').textContent = CLIENT.brand.name;
+document.getElementById('footer-links').innerHTML = `
+  <a href="#about">About</a>
+  <a href="#menu">Menu</a>
+  <a href="#contact">Contact</a>
+  <a href="mailto:${CLIENT.contact.email}">${CLIENT.contact.email}</a>
+`;
+document.getElementById('footer-copy').textContent = `© ${new Date().getFullYear()} ${CLIENT.brand.name}. All rights reserved.`;
+
+// Hamburger
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+function closeMobileMenu() { document.getElementById('mobile-menu').classList.remove('open'); }
+
+// FAQ toggle
+function toggleFaq(i) {
+  const item = document.getElementById('faq-' + i);
+  item.classList.toggle('open');
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// PWA service worker stub
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Register /sw.js when deploying as a real PWA
+    // navigator.serviceWorker.register('/sw.js');
+  });
+}
+</script>
+</body>
+</html>
